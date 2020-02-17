@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::resource('/texto','ArchivoController');
+Route::resource('/empresas', 'EmpresaController');
