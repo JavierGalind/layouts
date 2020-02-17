@@ -89,14 +89,14 @@ public function generartxt(Request $request){
        //////////////////////////////////////
         $file="C:/Users/Incretec Desarrollo/Desktop/Ficheros/prueba.txt";
         $fp= fopen($file,"wr");
-        fwrite($fp, "1".$empresa->numero_cliente.$request->fecha_pago."0001".$empre."PAGO DE NOMINA"."      "."05"."                                        "."C00"."\n");
+        fwrite($fp, "1".$empresa->numero_cliente.$request->fecha_pago.$request->serial.$empre."PAGO DE NOMINA"."      "."05"."                                        "."C00"."\n");
         fclose($fp);
         $fp0=fopen($file, "a+");
         fwrite($fp0, "2"."1"."001".$import."01".$empresa->numero_sucursal.$empresa->numero_cuenta."                    "."\n");
         fclose($fp0);
         $fp1= fopen($file,"a+");
         for ($i=0; $i <$cont ; $i++) {
-        fwrite($fp1, "3"."0"."001".$asimilable[$i]->importe."01".$asimilable[$i]->cuenta."1702202001"."                              ".$asimilable[$i]->nombre_empleado.'Nomina'."                                 "."                         "."0000000000000"."\n");
+        fwrite($fp1, "3"."0"."001".$asimilable[$i]->importe."01".$asimilable[$i]->cuenta.$request->referencia."                              ".$asimilable[$i]->nombre_empleado.'Nomina'."                                 "."                         "."0000000000000"."\n");
         }
         fclose($fp1);
         $fp2=fopen($file,"a+");
