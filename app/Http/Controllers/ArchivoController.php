@@ -151,4 +151,11 @@ public function generartxt(Request $request){
     {
         //
     }
+
+    public function eliminar(){
+     $empresa= Empresa::all();
+      $cont= Asimilable::count();
+     $empresa->delete();
+      return redirect()->action('ArchivoController@index');
+    }
 }

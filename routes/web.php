@@ -18,3 +18,4 @@ Route::get('/', function () {
 Route::resource('/texto','ArchivoController');
 Route::resource('/empresas', 'EmpresaController');
 Route::post('/generar', 'ArchivoController@generartxt')->name('texto.generartxt');
+Route::get('/limpiar', 'ArchivoController@eliminar')->name('texto.eliminar');
