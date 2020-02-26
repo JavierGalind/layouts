@@ -46,7 +46,8 @@ class ArchivoController extends Controller
 
           $asimilable = new Asimilable;
           $nom=$row->nombre_de_trabajador;
-          $asimilable->nombre_empleado = str_pad($nom,55);
+          $nom1=strtoupper($nom);
+          $asimilable->nombre_empleado = str_pad($nom1,55);
           $cadena= $row->cuenta;
           $cadena_tratada=str_replace('-', '', $cadena);
           $cadena_final=substr($cadena_tratada, 6,11);
@@ -54,6 +55,10 @@ class ArchivoController extends Controller
           $cadena1=$row->importe;
           $cadena_tratada1=str_replace('.', '', $cadena1);
           if(strlen($cadena_tratada1)==3 || strlen($cadena_tratada1)==4){
+              $aux = str_pad($cadena_tratada1, 16, "0", STR_PAD_LEFT);
+              $asimilable->importe=$aux."00";
+          }
+          if(strlen($cadena_tratada1)<3 || strlen($cadena_tratada1)==2){
               $aux = str_pad($cadena_tratada1, 16, "0", STR_PAD_LEFT);
               $asimilable->importe=$aux."00";
           }
@@ -77,15 +82,7 @@ public function generartxt(Request $request){
        $abonos=str_pad($cont, 6, "0", STR_PAD_LEFT);
        $cadena1=$request->importe_total;
        $cadena_tratada1=str_replace('.', '', $cadena1);
-       //////////////////////////////////////
-       if(strlen($cadena_tratada1)==3 || strlen($cadena_tratada1)==4){
-           $aux = str_pad($cadena_tratada1, 16, "0", STR_PAD_LEFT);
-           $import=$aux."00";
-       }
-       if(strlen($cadena_tratada1)==5 || strlen($cadena_tratada1)==6)
-       {
        $import = str_pad($cadena_tratada1, 18, "0", STR_PAD_LEFT);
-       }
        //////////////////////////////////////
         $file="C:/Users/Incretec Desarrollo/Desktop/Ficheros/prueba.txt";
         $fp= fopen($file,"wr");
@@ -96,7 +93,7 @@ public function generartxt(Request $request){
         fclose($fp0);
         $fp1= fopen($file,"a+");
         for ($i=0; $i <$cont ; $i++) {
-        fwrite($fp1, "3"."0"."001".$asimilable[$i]->importe."01".$asimilable[$i]->cuenta.$request->referencia."                              ".$asimilable[$i]->nombre_empleado.'Nomina'."                                 "."                         "."0000000000000"."\n");
+        fwrite($fp1, "3"."0"."001".$asimilable[$i]->importe."01".$asimilable[$i]->cuenta.$request->referencia."                              ".$asimilable[$i]->nombre_empleado.'NOMINA'."                                 "."                         "."0000000000000"."\n");
         }
         fclose($fp1);
         $fp2=fopen($file,"a+");
@@ -153,9 +150,9 @@ public function generartxt(Request $request){
     }
 
     public function eliminar(){
-     $empresa= Empresa::all();
-      $cont= Asimilable::count();
-     $empresa->delete();
-      return redirect()->action('ArchivoController@index');
+      $i="9999.99";
+      $cont= $cadena_tratada1=str_replace('.', '', $i);
+    $validar= strlen($cont);
+    echo $validar;
     }
 }
