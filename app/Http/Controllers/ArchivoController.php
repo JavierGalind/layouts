@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Empresa;
 use App\Asimilable;
 use Excel;
+use DB;
 class ArchivoController extends Controller
 {
     /**
@@ -49,24 +50,19 @@ class ArchivoController extends Controller
           $nom1=strtoupper($nom);
           $asimilable->nombre_empleado = str_pad($nom1,55);
           $cadena= $row->cuenta;
-          $cadena_tratada=str_replace('-', '', $cadena);
-          $cadena_final=substr($cadena_tratada, 6,11);
-          $asimilable->cuenta ="000000000".$cadena_final;
+          $asimilable->cuenta ="000000000".$cadena;
           $cadena1=$row->importe;
           $cadena_tratada1=str_replace('.', '', $cadena1);
           if(strlen($cadena_tratada1)==3 || strlen($cadena_tratada1)==4){
               $aux = str_pad($cadena_tratada1, 16, "0", STR_PAD_LEFT);
               $asimilable->importe=$aux."00";
           }
-          if(strlen($cadena_tratada1)<3 || strlen($cadena_tratada1)==2){
-              $aux = str_pad($cadena_tratada1, 16, "0", STR_PAD_LEFT);
-              $asimilable->importe=$aux."00";
-          }
           if(strlen($cadena_tratada1)==5 || strlen($cadena_tratada1)==6)
           {
-          $asimilable->importe = str_pad($cadena_tratada1, 18, "0", STR_PAD_LEFT);
+          $tratar=str_pad($cadena_tratada1, 17, "0", STR_PAD_LEFT);
+          $asimilable->importe=$tratar."0";
           }
-
+          $asimilable->status='1';
           $asimilable->save();
       });
       });
@@ -84,7 +80,7 @@ public function generartxt(Request $request){
        $cadena_tratada1=str_replace('.', '', $cadena1);
        $import = str_pad($cadena_tratada1, 18, "0", STR_PAD_LEFT);
        //////////////////////////////////////
-        $file="C:/Users/Incretec Desarrollo/Desktop/Ficheros/prueba.txt";
+        $file="C:/Users/Incretec Desarrollo/Desktop/ficheros/prueba.txt";
         $fp= fopen($file,"wr");
         fwrite($fp, "1".$empresa->numero_cliente.$request->fecha_pago.$request->serial.$empre."PAGO DE NOMINA"."      "."05"."                                        "."C00"."\n");
         fclose($fp);
@@ -150,9 +146,7 @@ public function generartxt(Request $request){
     }
 
     public function eliminar(){
-      $i="9999.99";
-      $cont= $cadena_tratada1=str_replace('.', '', $i);
-    $validar= strlen($cont);
-    echo $validar;
+    $asimilables = DB::table('asimilables')->where('status', '1')->delete();
+    return redirect()->action('ArchivoController@create');
     }
 }

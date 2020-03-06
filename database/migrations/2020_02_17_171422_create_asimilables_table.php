@@ -16,6 +16,7 @@ class CreateAsimilablesTable extends Migration
         Schema::create('asimilables', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre_empleado');
+            $table->integer('status');
             $table->string('cuenta');
             $table->string('importe');
             $table->timestamps();
